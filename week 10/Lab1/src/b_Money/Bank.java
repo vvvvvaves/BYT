@@ -38,6 +38,16 @@ public class Bank {
 	 * Open an account at this bank.
 	 * @param accountid The ID of the account
 	 * @throws AccountExistsException If the account already exists
+	 *
+	 * BUG FOUND:
+	 * changed accountlist.get(accountid) to accountlist.put(...)
+	 *
+	 * This function follows the steps:
+	 * 1. Check that this accountid has not yet been added to the accountlist.
+	 * 2. If it has been, throw AccountExistsException.
+	 * 3. If not, put this accountid with new Account as its value into accountlist and record return_val
+	 * 4. If accountid has been successfully added, and it is a new key, accountlist will return null, hence
+	 * 5. If return_val == null, account has been successfully opened.
 	 */
 	public boolean openAccount(String accountid) throws AccountExistsException {
 		if (accountlist.containsKey(accountid)) {
@@ -70,6 +80,10 @@ public class Bank {
 	 * @param accountid Account to withdraw from
 	 * @param money Money to withdraw
 	 * @throws AccountDoesNotExistException If the account does not exist
+	 *
+	 * BUG FOUND:
+	 *
+	 * changed account.deposit(...) to account.withdraw(...) in 'else' statement.
 	 */
 	public void withdraw(String accountid, Money money) throws AccountDoesNotExistException {
 		if (!accountlist.containsKey(accountid)) {
@@ -161,9 +175,17 @@ public class Bank {
 	
 	/**
 	 * A time unit passes in the system
+	 *
+	 * ALTERNATION:
+	 *
+	 * I added a check of whether account actually exists, and the key does not refer to null, in order to avoid
+	 * NullPointerException.
 	 */
 	public void tick() throws AccountDoesNotExistException {
 		for (Account account : accountlist.values()) {
+			if (account == null) {
+				throw new AccountDoesNotExistException();
+			}
 			account.tick();
 		}
 	}	

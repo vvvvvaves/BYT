@@ -25,7 +25,15 @@ public class AccountTest {
 		DanskeBank.deposit("Hans", new Money(10000000, DKK));
 		SweBank.deposit("Alice", new Money(1000000, SEK));
 	}
-	
+
+	/**
+	 * To check if add/remove functions work correctly, test follows the steps:
+	 * 	1. Check that Payment did not exist before.
+	 * 	2. Add Payment.
+	 * 	3. Check that this Payment exists, now.
+	 * 	4. Remove Payment.
+	 * 	5. Check that it does not exist after removal.
+	 * **/
 	@Test
 	public void testAddRemoveTimedPayment() throws AccountDoesNotExistException {
 		Assert.assertTrue(!testAccount.timedPaymentExists("001"));
@@ -35,7 +43,18 @@ public class AccountTest {
 		Assert.assertTrue(!testAccount.timedPaymentExists("001"));
 
 	}
-	
+
+	/**
+	 * To check whether Timed Payments work correctly, test case follows the steps:
+	 * 1. Add to Hans' account (referred to as 'fromaccount') Timed Payment to Alice (referred to as 'toaccount').
+	 * 2. Get their initial balances in respected banks.
+	 * 3. Tick 'fromaccount' 10 times (one interval).
+	 * 4. Check that expected balances of 'fromaccount' and 'toaccount' are the same as actual ones.
+	 * 5. Repeat this process for one more interval to check that TimedPayment is repetitive as expected.
+	 * 6. Remove TimedPayment.
+	 * 7. Go through one more interval.
+	 * 8. Check that expected balances are not different from those recorded one interval ago.
+	 * **/
 	@Test
 	public void testTimedPayment() throws AccountDoesNotExistException {
 
@@ -45,11 +64,11 @@ public class AccountTest {
 		Integer interval = 10;
 		Integer next = 0;
 
-		testAccount.addTimedPayment( "001", 10, 0, timedPayment, SweBank, toaccount);
+		testAccount.addTimedPayment( "001", interval, next, timedPayment, SweBank, toaccount);
 
 		Money initialHans = testAccount.getBalance();
 		Money initialAlice = new Money(SweBank.getBalance(toaccount), SEK);
-		for (int i = 0; i < 10; i++) {
+		for (int i = 0; i < interval; i++) {
 			testAccount.tick();
 		}
 
@@ -87,6 +106,15 @@ public class AccountTest {
 		Assert.assertEquals(expectedTo, actualTo);
 	}
 
+	/**
+	 * To check that functions deposit and withdraw work as expected, the test case follows the steps:
+	 * 1. Records initial amount of money on the testAccount (the same as in setUp function)
+	 * 2. Performs deposit adding the amount of money recorded in variable 'add'.
+	 * 3. Checks that expected balance equals 'initial'+'add'.
+	 * 4. Withdraws the 'add' amount.
+	 * 5. Checks that current getBalance() equals 'initial' amount of money.
+	 *
+	 * **/
 	@Test
 	public void testAddWithdraw() {
 		Money initial = new Money(10000000, DKK);
@@ -96,7 +124,12 @@ public class AccountTest {
 		testAccount.withdraw(add);
 		Assert.assertEquals(testAccount.getBalance(), initial);
 	}
-	
+
+	/**
+	 * To check that function getBalance() works as expected, the test case follows the steps:
+	 * 1. Records the amount of money on testAccount (the same amount as given in the setUp function).
+	 * 2. Checks that result of getBalance() equals to that expected amount.
+	 * **/
 	@Test
 	public void testGetBalance() {
 		Money expected = new Money(10000000, DKK);

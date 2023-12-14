@@ -16,6 +16,11 @@ public class CurrencyTest {
 		EUR = new Currency("EUR", 1.5);
 	}
 
+	/**
+	 * For all of the test cases in this class I checked that the function I am calling does exactly the same
+	 * as the raw implementation of the same operation.
+	 * **/
+
 	@Test
 	public void testGetName() {
 		assertEquals(SEK.getName(), "SEK");
@@ -36,7 +41,7 @@ public class CurrencyTest {
 		NOK.setRate(1.222);
 		assertEquals(NOK.getRate(), 1.222, 0.00000000000001);
 	}
-	
+
 	@Test
 	public void testGlobalValue() {
 		assertEquals(SEK.universalValue(200050), (int)(0.15*200050));

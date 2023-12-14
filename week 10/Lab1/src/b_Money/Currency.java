@@ -24,6 +24,11 @@ public class Currency {
 	 * @param amount An amount of cash of this currency.
 	 * @return The value of amount in the "universal currency"
 	 */
+
+	/**
+	 * Because it was not specified, I assumed that converting money to universal value means multiplying the amount
+	 * by the currency rate and converting the result to Integer (the float values that get cut are the third and fourth order).
+	 * **/
 	public int universalValue(Integer amount) {
 		return (int)(amount*rate);
 	}
@@ -55,7 +60,13 @@ public class Currency {
 	 * 
 	 * @param amount Amount of the other Currency
 	 * @param othercurrency The other Currency
+	 *
 	*/
+
+	/**
+	 * Because it was not specified, I assumed that converting money to the other currency means dividing the amount by its
+	 * current currency and multiplying by the new one (refer to universalValue function).
+	 * **/
 	public int valueInThisCurrency(Integer amount, Currency othercurrency) {
 		return (int)(amount*othercurrency.rate/this.rate);
 	}
